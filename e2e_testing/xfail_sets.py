@@ -922,4 +922,6 @@ LTC_XFAIL_SET = {
     "AtenFloatScalarModule_basic",
     "PrimsSqueezeModule_basic",
     "PrimsSqueezeEmptyDimensionsModule_basic",
+    "ScatterValueFloatModule_basic",
+    "ScatterValueIntModule_basic",
 }
