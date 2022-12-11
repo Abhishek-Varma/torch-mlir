@@ -21,6 +21,7 @@
 #include "torch-mlir/Conversion/TorchToTMTensor/TorchToTMTensor.h"
 #include "torch-mlir/Conversion/TorchToTosa/TorchToTosa.h"
 #include "torch-mlir/Conversion/TorchConversionToMLProgram/TorchConversionToMLProgram.h"
+#include "torch-mlir/Conversion/UpdateWeight/UpdateWeight.h"
 #ifdef TORCH_MLIR_ENABLE_MHLO
 #include "mhlo/transforms/passes.h"
 #include "torch-mlir/Conversion/TorchToMhlo/TorchToMhlo.h"
@@ -49,6 +50,12 @@ void mlir::torch::registerTorchConversionPasses() {
       TorchConversion::createTorchBackendToLinalgOnTensorsBackendPipeline);
 
   mlir::PassPipelineRegistration<>(
+      "update-weight",
+      "Pipeline updating weights of a Linalg IR by extracting weights from a"
+      " Torchscript IR.",
+      TorchConversion::createUpdateWeightPipeline);
+
+  mlir::PassPipelineRegistration<>(
       "torch-backend-to-tosa-backend-pipeline",
       "Pipeline lowering torch backend contract to TOSA backend "
       "contract.",
@@ -60,6 +67,12 @@ void mlir::torch::registerTorchConversionPasses() {
       "contract.",
       TorchConversion::createTorchBackendToMhloBackendPipeline);
 #endif
+}
+
+/// TODO: Register `update-weight` as a standalone pass instead of making it a
+///       pipeline.
+void TorchConversion::createUpdateWeightPipeline(OpPassManager &pm) {
+  pm.addPass(createUpdateWeightPass());
 }
 
 void TorchConversion::createTorchBackendToLinalgOnTensorsBackendPipeline(

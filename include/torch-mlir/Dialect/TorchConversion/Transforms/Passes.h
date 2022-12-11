@@ -26,6 +26,13 @@ namespace TorchConversion {
 /// linalg-on-tensors backend contract.
 void createTorchBackendToLinalgOnTensorsBackendPipeline(OpPassManager &pm);
 
+/// TODO: This shouldn't be a pipeline - will be rather registering this as
+///       a standalone pass.
+/// This pass pipeline extracts the `tensor.literal` ops from the given
+/// torchscript IR and updates the corresponding weight tensors (`arith.const`)
+/// ops in a Linalg IR pointed to by an environment variable.
+void createUpdateWeightPipeline(OpPassManager &pm);
+
 /// Creates a pipeline that lowers from the torch backend contract to the
 /// TOSA backend contract.
 void createTorchBackendToTosaBackendPipeline(OpPassManager &pm);

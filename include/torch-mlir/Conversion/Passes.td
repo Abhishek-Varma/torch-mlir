@@ -26,6 +26,11 @@ def ConvertTorchToSCF: Pass<"convert-torch-to-scf", "func::FuncOp"> {
   let constructor = "mlir::torch::createConvertTorchToSCFPass()";
 }
 
+def UpdateWeight: Pass<"update-weight", "ModuleOp"> {
+  let summary = "Update weight in the Linalg IR pointed to by the environment variable";
+  let constructor = "mlir::torch::createUpdateWeightPass()";
+}
+
 def ConvertTorchToLinalg : Pass<"convert-torch-to-linalg", "func::FuncOp"> {
   let summary = "Convert recognized Torch ops to Linalg ops";
   let description = [{

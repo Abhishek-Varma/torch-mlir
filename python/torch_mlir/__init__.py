@@ -365,6 +365,11 @@ PyTorch TorchScript module -> torch-mlir Object Graph IR import failed with:
     finally:
         sys.stderr = original_stderr
     if output_type == OutputType.RAW:
+        run_pipeline_with_repro_report(
+            mb.module,
+            "builtin.module(update-weight)",
+            "update weight of the Linalg IR"
+        )
         return mb.module
 
     option_string = "{backend-legal-ops=" + ",".join(backend_legal_ops) + "}"
