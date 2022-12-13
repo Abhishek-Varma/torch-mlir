@@ -31,6 +31,11 @@ def UpdateWeight: Pass<"update-weight", "ModuleOp"> {
   let constructor = "mlir::torch::createUpdateWeightPass()";
 }
 
+def MarkWeight: Pass<"mark-weight", "ModuleOp"> {
+  let summary = "Mark weight in the Torchscript IR";
+  let constructor = "mlir::torch::createMarkWeightPass()";
+}
+
 def ConvertTorchToLinalg : Pass<"convert-torch-to-linalg", "func::FuncOp"> {
   let summary = "Convert recognized Torch ops to Linalg ops";
   let description = [{

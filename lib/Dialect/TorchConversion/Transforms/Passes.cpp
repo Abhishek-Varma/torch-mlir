@@ -56,6 +56,11 @@ void mlir::torch::registerTorchConversionPasses() {
       TorchConversion::createUpdateWeightPipeline);
 
   mlir::PassPipelineRegistration<>(
+      "mark-weight",
+      "Pipeline marking weights of a Torchscript IR.",
+      TorchConversion::createMarkWeightPipeline);
+
+  mlir::PassPipelineRegistration<>(
       "torch-backend-to-tosa-backend-pipeline",
       "Pipeline lowering torch backend contract to TOSA backend "
       "contract.",
@@ -73,6 +78,12 @@ void mlir::torch::registerTorchConversionPasses() {
 ///       pipeline.
 void TorchConversion::createUpdateWeightPipeline(OpPassManager &pm) {
   pm.addPass(createUpdateWeightPass());
+}
+
+/// TODO: Register `update-weight` as a standalone pass instead of making it a
+///       pipeline.
+void TorchConversion::createMarkWeightPipeline(OpPassManager &pm) {
+  pm.addPass(createMarkWeightPass());
 }
 
 void TorchConversion::createTorchBackendToLinalgOnTensorsBackendPipeline(

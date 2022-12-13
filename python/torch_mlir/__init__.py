@@ -372,6 +372,13 @@ PyTorch TorchScript module -> torch-mlir Object Graph IR import failed with:
         )
         return mb.module
 
+    # import pdb
+    # pdb.set_trace()
+    run_pipeline_with_repro_report(
+        mb.module,
+        "builtin.module(mark-weight)",
+        "mark weight of the Torchscript IR"
+    )
     option_string = "{backend-legal-ops=" + ",".join(backend_legal_ops) + "}"
     run_pipeline_with_repro_report(
         mb.module,

@@ -232,8 +232,9 @@ public:
 static LogicalResult
 reduceNonValueTensorLiteralOpToValueTensorLiteralOp(NonValueTensorLiteralOp op,
                                                     PatternRewriter &rewriter) {
-  Value valueTensor =
+  auto valueTensor =
       rewriter.create<ValueTensorLiteralOp>(op->getLoc(), op.getValue());
+  valueTensor->setAttrs(op->getAttrs());
   Value tensor =
       copyTensorToType(rewriter, op->getLoc(), op.getType(), valueTensor);
   rewriter.replaceOp(op, {tensor});

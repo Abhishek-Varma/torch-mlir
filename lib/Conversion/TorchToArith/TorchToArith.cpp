@@ -25,6 +25,7 @@
 #include "torch-mlir/Dialect/TorchConversion/IR/TorchConversionDialect.h"
 #include "torch-mlir/Dialect/TorchConversion/Transforms/BackendTypeConversion.h"
 
+#include "llvm/Support/Debug.h"
 using namespace mlir;
 using namespace mlir::torch;
 using namespace mlir::torch::Torch;
@@ -196,6 +197,12 @@ public:
           op, elements.mapValues(builtinTensorElemTy, [&](const APInt &v) {
             return APInt(bitWidth, v.getSExtValue());
           }));
+      // auto cstOp = rewriter.create<arith::ConstantOp>(op.getLoc(), op.getType(),
+      //     elements.mapValues(builtinTensorElemTy, [&](const APInt &v) {
+      //       return APInt(bitWidth, v.getSExtValue());
+      //     }));
+      // cstOp->setAttrs(op->getAttrs());
+      // rewriter.replaceOp(op, {cstOp});
       return success();
     }
     if (auto elements = op.getValueAttr().dyn_cast<DenseResourceElementsAttr>()) {
@@ -209,11 +216,32 @@ public:
           assert(blob && "Expecting dense resource with a valid blob");
           rewriter.replaceOpWithNewOp<arith::ConstantOp>(
               op, DenseElementsAttr::get(shapedType, blob->getData()));
+          // auto cstOp = rewriter.create<arith::ConstantOp>(op.getLoc(), op.getType(),
+          //     DenseElementsAttr::get(shapedType, blob->getData()));
+          // cstOp->setAttrs(op->getAttrs());
+          // rewriter.replaceOp(op, {cstOp});
           return success();
         }
       }
     }
-    rewriter.replaceOpWithNewOp<arith::ConstantOp>(op, op.getValueAttr());
+    // auto elements = op.getValueAttr().dyn_cast<DenseFPElementsAttr>();
+    // rewriter.replaceOpWithNewOp<arith::ConstantOp>(op, op.getValueAttr());
+    // llvm::dbgs()<<"From C++\n";
+    // llvm::dbgs()<<op<<"\n";
+    // Type elemTy = op.getValueAttr().getElementType();
+    // llvm::dbgs()<<"Type to use : "<<op.getValueAttr().getType()<<"\n";
+    // llvm::dbgs()<<elemTy<<"\n";
+    // unsigned bitWidth = elemTy.getIntOrFloatBitWidth();
+    // llvm::dbgs()<<bitWidth<<"\n";
+    // Type builtinTensorElemTy = IntegerType::get(context, bitWidth);
+    // llvm::dbgs()<<builtinTensorElemTy<<"\n";
+    // llvm::dbgs()<<elements.mapValues(builtinTensorElemTy, [&](const APInt &v) {
+    //         return APFloat(bitWidth, v.getSExtValue());
+    //       })<<"\n";
+    auto cstOp = rewriter.create<arith::ConstantOp>(op.getLoc(), op.getValueAttr().getType(),
+              op.getValueAttr());
+    cstOp->setAttrs(op->getAttrs());
+    rewriter.replaceOp(op, {cstOp});
     return success();
   }
 };

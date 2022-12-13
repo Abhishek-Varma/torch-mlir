@@ -33,6 +33,10 @@ void createTorchBackendToLinalgOnTensorsBackendPipeline(OpPassManager &pm);
 /// ops in a Linalg IR pointed to by an environment variable.
 void createUpdateWeightPipeline(OpPassManager &pm);
 
+/// TODO: This shouldn't be a pipeline - will be rather registering this as
+///       a standalone pass.
+void createMarkWeightPipeline(OpPassManager &pm);
+
 /// Creates a pipeline that lowers from the torch backend contract to the
 /// TOSA backend contract.
 void createTorchBackendToTosaBackendPipeline(OpPassManager &pm);

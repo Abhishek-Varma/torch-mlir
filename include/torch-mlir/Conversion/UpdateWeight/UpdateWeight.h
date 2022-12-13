@@ -15,12 +15,11 @@
 
 namespace mlir {
 class ModuleOp;
-//template <typename T>
-//class OperationPass;
-
 namespace torch {
 
 std::unique_ptr<OperationPass<ModuleOp>> createUpdateWeightPass();
+
+std::unique_ptr<OperationPass<ModuleOp>> createMarkWeightPass();
 }
 } // namespace mlir
 
