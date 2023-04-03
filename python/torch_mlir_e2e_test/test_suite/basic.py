@@ -3364,6 +3364,64 @@ def SortIntListReverse_basic(module, tu: TestUtils):
 
 # ==============================================================================
 
+
+class SortTensor(torch.nn.Module):
+
+    def __init__(self):
+        super().__init__()
+
+    @export
+    @annotate_args([
+        None,
+        ([3, 4], torch.float32, True)
+    ])
+    def forward(self, input):
+        return torch.sort(input)
+
+
+@register_test_case(module_factory=lambda: SortTensor())
+def SortTensor_basic(module, tu: TestUtils):
+    module.forward(tu.rand(3,4))
+
+
+class SortTensorDescending(torch.nn.Module):
+
+    def __init__(self):
+        super().__init__()
+
+    @export
+    @annotate_args([
+        None,
+        ([3, 4], torch.float32, True)
+    ])
+    def forward(self, input):
+        return torch.sort(input, descending=True)
+
+
+@register_test_case(module_factory=lambda: SortTensorDescending())
+def SortTensorDescending_basic(module, tu: TestUtils):
+    module.forward(tu.rand(3,4))
+
+class SortTensorSpecificDimension(torch.nn.Module):
+
+    def __init__(self):
+        super().__init__()
+
+    @export
+    @annotate_args([
+        None,
+        ([3, 4], torch.float32, True)
+    ])
+    def forward(self, input):
+        return torch.sort(input, dim=0)
+
+
+@register_test_case(module_factory=lambda: SortTensorSpecificDimension())
+def SortTensorSpecificDimension_basic(module, tu: TestUtils):
+    module.forward(tu.rand(3,4))
+
+# ==============================================================================
+
 class BucketizeTensorModule(torch.nn.Module):
     def __init__(self):
         super().__init__()

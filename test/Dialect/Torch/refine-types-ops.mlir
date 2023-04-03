@@ -290,6 +290,13 @@ func.func @torch.aten.Matmul.Broadcast.Matrix(%arg0: !torch.vtensor<*,f32>, %arg
 }
 
 // -----
+
+func.func @torch.aten.sort(%input: !torch.vtensor<*,f32>, %dim: !torch.int, %descending: !torch.bool) -> !torch.tensor {
+  %0 = torch.aten.sort %input, %dim, %descending : !torch.vtensor<*,f32>, !torch.int, !torch.bool -> !torch.tensor
+  return %0 : !torch.tensor
+}
+
+// -----
 // CHECK-LABEL:  func.func @torch.aten.Matmul.Broadcast.Vector(
 // CHECK-SAME:                                            %[[LHS:.*]]: !torch.vtensor<*,f32>,
 // CHECK-SAME:                                            %[[RHS:.*]]: !torch.vtensor<*,f32>) -> !torch.tensor {
